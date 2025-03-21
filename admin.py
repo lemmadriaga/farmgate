@@ -1,5 +1,6 @@
 from user import User
 from database import Database
+from loan_system import LoanSystem
 import csv
 import os
 
@@ -49,41 +50,72 @@ class Admin(User):
         
         return True, f"Transaction approved: {buyer_name}'s purchase of {product_name}"
     
-    def approve_loan(self, farmer_id, loan_amount):
-        """Approve a loan application from a farmer"""
-        loans_file = os.path.join("data", "loans.csv")
-        if not os.path.isfile(loans_file):
-            print("\n❌ No loan applications found.\n")
-            return False, "No loan applications found"
+    def approve_loan(self, loan_id, approved=True):
+        """Approve or reject a loan application"""
+        # Create a LoanSystem instance
+        loan_system = LoanSystem()
         
-        with open(loans_file, mode='r') as file:
-            reader = csv.reader(file)
-            headers = next(reader)  # Skip header row
-            loans = list(reader)
+        # Get loan details first to show more information
+        loan_details = loan_system.get_loan_details(loan_id)
+        if not loan_details:
+            print(f"\n❌ Loan with ID {loan_id} not found.\n")
+            return False, f"Loan with ID {loan_id} not found"
         
-        # Find and update the loan
-        updated_loans = []
-        found = False
+        # Approve or reject the loan
+        success, message = loan_system.approve_loan(self.user_id, loan_id, approved)
         
-        for loan in loans:
-            # Check if this is the loan we're looking for
-            if len(loan) >= 3 and loan[0] == farmer_id and float(loan[2]) == float(loan_amount) and loan[4] == "Pending":
-                loan[4] = "Approved"  # Update status
-                found = True
-                print(f"\n✅ Loan approved: {loan[1]}'s loan for ₱{loan_amount}\n")
-            updated_loans.append(loan)
+        if success:
+            action = "approved" if approved else "rejected"
+            farmer_id = loan_details["farmer_id"]
+            amount = loan_details["amount"]
+            print(f"\n✅ {message}\n")
+            return True, f"Loan {action} for farmer {farmer_id} in the amount of ₱{amount}"
+        else:
+            print(f"\n❌ {message}\n")
+            return False, message
+            
+    def view_all_loans(self, status=None):
+        """View all loans in the system, optionally filtered by status"""
+        loan_system = LoanSystem()
         
-        if not found:
-            print("\n❌ Loan not found or already approved.\n")
-            return False, "Loan not found or already approved"
+        # Get loans based on status
+        if status:
+            filtered_loans = Database.get_loans_by_status(loan_system.loans_file, status)
+        else:
+            filtered_loans = Database.read_from_csv(loan_system.loans_file)
         
-        # Write updated loans back to CSV
-        with open(loans_file, mode='w', newline='') as file:
-            writer = csv.writer(file)
-            writer.writerow(headers)
-            writer.writerows(updated_loans)
+        if not filtered_loans:
+            status_msg = f" with status '{status}'" if status else ""
+            print(f"\n❌ No loans{status_msg} found.\n")
+            return []
         
-        return True, f"Loan approved for farmer {farmer_id} in the amount of ₱{loan_amount}"
+        print("\n===== Loan Applications =====\n")
+        for loan in filtered_loans:
+            if len(loan) >= 1:  # Ensure there's at least a loan ID
+                loan_id = loan[0]
+                farmer_id = loan[1] if len(loan) > 1 else "Unknown"
+                amount = loan[2] if len(loan) > 2 else "Unknown"
+                interest_rate = loan[3] if len(loan) > 3 else "Unknown"
+                application_date = loan[4] if len(loan) > 4 else "Unknown"
+                status = loan[5] if len(loan) > 5 else "Unknown"
+                
+                print(f"Loan ID: {loan_id}")
+                print(f"Farmer ID: {farmer_id}")
+                print(f"Amount: ₱{amount}")
+                print(f"Interest Rate: {interest_rate}%")
+                print(f"Application Date: {application_date}")
+                print(f"Status: {status}")
+                
+                # If loan is approved, show approval date and due date
+                if status == "Approved" and len(loan) >= 8:
+                    approval_date = loan[6] if len(loan) > 6 else "Unknown"
+                    due_date = loan[7] if len(loan) > 7 else "Unknown"
+                    print(f"Approval Date: {approval_date}")
+                    print(f"Due Date: {due_date}")
+                
+                print("\n----------------------------\n")
+        
+        return filtered_loans
     
     def manage_users(self, action, user_id=None, new_data=None):
         """Manage users in the system (view, update, delete)"""
@@ -176,29 +208,16 @@ class Admin(User):
             return True, report
             
         elif report_type == "loans":
-            loans = Database.read_from_csv("loans.csv")
-            if not loans:
-                return False, "No loans found"
-            
-            # Count loans by status
-            pending = sum(1 for l in loans if l[4] == "Pending")
-            approved = sum(1 for l in loans if l[4] == "Approved")
-            
-            # Calculate total value
-            total_value = sum(float(l[2]) for l in loans if len(l) > 2)
-            
-            report = {
-                "total_loans": len(loans),
-                "pending": pending,
-                "approved": approved,
-                "total_value": total_value
-            }
+            # Use the LoanSystem to generate a loan report
+            loan_system = LoanSystem()
+            report = loan_system.generate_loan_report()
             
             print("\n📊 Loan Report:")
             print(f"- Total Loans: {report['total_loans']}")
-            print(f"- Pending: {report['pending']}")
-            print(f"- Approved: {report['approved']}")
-            print(f"- Total Value: ₱{report['total_value']:.2f}")
+            print(f"- Pending Loans: {report['pending_loans']}")
+            print(f"- Approved Loans: {report['approved_loans']}")
+            print(f"- Rejected Loans: {report['rejected_loans']}")
+            print(f"- Total Approved Amount: ₱{report['total_approved_amount']:.2f}")
             
             return True, report
         

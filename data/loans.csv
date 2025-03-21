@@ -1,0 +1,5 @@
+loan_id,farmer_id,amount,interest_rate,application_date,status,approval_date,due_date
+ada1b367,fa083da2,10000.0,0.5,2025-03-21,Approved,2025-03-21,2025-09-17
+ca0d8803,fa083da2,100.0,0.5,2025-03-21,Pending,,
+e23063be,fa083da2,1000.0,1.0,2025-03-21,Pending,,
+70055958,fa083da2,100000.0,0.3,2025-03-21,Pending,,

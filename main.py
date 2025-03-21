@@ -4,6 +4,7 @@ from buyer import Buyer
 from marketplace import Marketplace
 from admin import Admin
 from transactions import TransactionManager
+from loan_system import LoanSystem
 import time
 
 def main():
@@ -86,15 +87,18 @@ def start_system(user_id, username, role):
             print("\nFarmer Options:")
             print("3. List Produce")
             print("4. Apply for Loan")
+            print("5. View My Loans")
+            print("6. Make Loan Repayment")
         elif role == "buyer":
             print("\nBuyer Options:")
             print("3. Purchase Produce")
         elif role == "admin":
             print("\nAdmin Options:")
             print("3. Approve Transaction")
-            print("4. Approve Loan")
-            print("5. Manage Users")
-            print("6. Generate Reports")
+            print("4. View Pending Loans")
+            print("5. Approve/Reject Loan")
+            print("6. Manage Users")
+            print("7. Generate Reports")
         
         print("\n0. Logout")
         choice = input("\nEnter your choice: ")
@@ -116,6 +120,17 @@ def start_system(user_id, username, role):
             loan_amount = float(input("Enter loan amount (₱): "))
             interest_rate = float(input("Enter interest rate (%): "))
             user.apply_for_loan(loan_amount, interest_rate)
+            
+        elif choice == "5" and role == "farmer":  # View My Loans
+            user.view_my_loans()
+            
+        elif choice == "6" and role == "farmer":  # Make Loan Repayment
+            # First show the farmer's loans
+            loans = user.view_my_loans()
+            if loans:
+                loan_id = input("Enter Loan ID to make a repayment: ")
+                amount = float(input("Enter repayment amount (₱): "))
+                user.make_loan_repayment(loan_id, amount)
 
         # Buyer options
         elif choice == "3" and role == "buyer":  # Purchase Produce
@@ -129,12 +144,16 @@ def start_system(user_id, username, role):
             product_name = input("Enter Product Name: ")
             user.approve_transaction(buyer_name, product_name)
             
-        elif choice == "4" and role == "admin":  # Approve Loan
-            farmer_id = input("Enter Farmer ID: ")
-            loan_amount = float(input("Enter Loan Amount: "))
-            user.approve_loan(farmer_id, loan_amount)
+        elif choice == "4" and role == "admin":  # View Pending Loans
+            user.view_all_loans(status="Pending")
             
-        elif choice == "5" and role == "admin":  # Manage Users
+        elif choice == "5" and role == "admin":  # Approve/Reject Loan
+            loan_id = input("Enter Loan ID: ")
+            approval = input("Approve this loan? (yes/no): ").lower()
+            approved = approval == "yes"
+            user.approve_loan(loan_id, approved)
+            
+        elif choice == "6" and role == "admin":  # Manage Users
             print("\n1. View All Users\n2. Delete User")
             admin_choice = input("Enter choice: ")
             
@@ -145,7 +164,7 @@ def start_system(user_id, username, role):
                 success, message = user.manage_users("delete", user_id=user_id_to_delete)
                 print("\n✅ " + message if success else "\n❌ " + message)
                 
-        elif choice == "6" and role == "admin":  # Generate Reports
+        elif choice == "7" and role == "admin":  # Generate Reports
             print("\n1. Transaction Report\n2. User Report\n3. Loan Report")
             report_choice = input("Enter choice: ")
             
@@ -158,7 +177,7 @@ def start_system(user_id, username, role):
             else:
                 print("\n❌ Invalid report type!")
 
-        elif choice == "6":
+        elif choice == "0":
             print("\n Logging out...\n")
             break
 
