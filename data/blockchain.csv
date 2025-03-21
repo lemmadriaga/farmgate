@@ -1,0 +1,3 @@
+Index,Timestamp,Previous Hash,Hash,Nonce,Transactions
+0,1742568934.709398,0,00f6b3edf22edad803e2456aa2fa35191b56dad5e24fa192ba79ecd3b54a4e52,236,[]
+1,1742569897.9496691,00f6b3edf22edad803e2456aa2fa35191b56dad5e24fa192ba79ecd3b54a4e52,0003b63605f4a4cf1375e477d08348b8e7a3af74a55b9120c28f4e892fd54127,63,"[{""id"": ""a809f167"", ""buyer_id"": ""8626c636"", ""seller_id"": ""fa083da2"", ""product_id"": ""fa083da2"", ""amount"": 50.0, ""timestamp"": 1742569897.949645, ""contract_id"": ""b81387a3"", ""type"": ""contract_execution""}, {""sender"": ""System"", ""recipient"": ""admin"", ""amount"": 1, ""type"": ""reward""}]"

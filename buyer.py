@@ -10,25 +10,50 @@ class Buyer(User):
         self.purchase_history = []
 
     def purchase_produce(self, product_id):
+        from transactions import TransactionManager
+        
         products = Database.read_from_csv("marketplace.csv")
         for product in products:
             if product[0] == product_id:
-                # Record transaction with buyer ID
-                transaction_data = [self.user_id, self.name, product[2], product[3], "Pending"]
-                Database.write_to_csv("transactions.csv", transaction_data, 
-                                    ["Buyer ID", "Buyer Name", "Product", "Price", "Status"])
+                seller_id = product[0]
+                seller_name = product[1]
+                product_name = product[2]
+                price = product[3]
+                
+                # Create transaction manager
+                transaction_manager = TransactionManager()
+                
+                # Record transaction with blockchain integration
+                transaction_id = transaction_manager.record_transaction(
+                    buyer_id=self.user_id,
+                    buyer_name=self.name,
+                    seller_id=seller_id,
+                    product_id=product_id,
+                    product_name=product_name,
+                    price=price,
+                    status="Pending"
+                )
+                
+                # Create smart contract for the purchase
+                contract_id = transaction_manager.create_smart_contract(
+                    buyer_id=self.user_id,
+                    seller_id=seller_id,
+                    product_id=product_id,
+                    price=float(price)
+                )
                 
                 # Add to purchase history
                 self.purchase_history.append({
-                    "product_name": product[2],
-                    "price": product[3],
-                    "seller_id": product[0],
-                    "seller_name": product[1],
-                    "status": "Pending"
+                    "product_name": product_name,
+                    "price": price,
+                    "seller_id": seller_id,
+                    "seller_name": seller_name,
+                    "status": "Pending",
+                    "transaction_id": transaction_id,
+                    "contract_id": contract_id
                 })
                 
-                print(f"\n✅ {self.name} purchased {product[2]} for ₱{product[3]}!\n")
-                return True, f"Successfully purchased {product[2]}"
+                return True, f"Successfully purchased {product_name} with secure blockchain transaction"
 
         print("\n❌ Product not found!\n")
         return False, "Product not found"

@@ -102,6 +102,12 @@ def start_system(user_id, username, role):
             print("7. Manage Users")
             print("8. Generate Reports")
             print("9. Manage Educational Resources")
+            print("\nBlockchain Options:")
+            print("10. View Blockchain Transactions")
+            print("11. Verify Blockchain Integrity")
+            print("12. View Smart Contracts")
+            print("13. Execute Smart Contract")
+            print("14. Generate Blockchain Report")
         
         print("\n0. Logout")
         choice = input("\nEnter your choice: ")
@@ -145,20 +151,20 @@ def start_system(user_id, username, role):
                 print("\n❌ Invalid choice.\n")
 
         # Farmer options
-        elif choice == "3" and role == "farmer":  # List Produce
+        elif choice == "4" and role == "farmer":  # List Produce
             product_name = input("Enter produce name: ")
             price = float(input("Enter price (₱): "))
             user.list_produce(product_name, price)
             
-        elif choice == "4" and role == "farmer":  # Apply for Loan
+        elif choice == "5" and role == "farmer":  # Apply for Loan
             loan_amount = float(input("Enter loan amount (₱): "))
             interest_rate = float(input("Enter interest rate (%): "))
             user.apply_for_loan(loan_amount, interest_rate)
             
-        elif choice == "5" and role == "farmer":  # View My Loans
+        elif choice == "6" and role == "farmer":  # View My Loans
             user.view_my_loans()
             
-        elif choice == "6" and role == "farmer":  # Make Loan Repayment
+        elif choice == "7" and role == "farmer":  # Make Loan Repayment
             # First show the farmer's loans
             loans = user.view_my_loans()
             if loans:
@@ -167,16 +173,26 @@ def start_system(user_id, username, role):
                 user.make_loan_repayment(loan_id, amount)
 
         # Buyer options
-        elif choice == "3" and role == "buyer":  # Purchase Produce
+        elif choice == "4" and role == "buyer":  # Purchase Produce
             Marketplace.display_products()
             product_id = input("Enter Product ID to purchase: ")
             user.purchase_produce(product_id)
 
         # Admin options
         elif choice == "3" and role == "admin":  # Approve Transaction
-            buyer_name = input("Enter Buyer Name: ")
-            product_name = input("Enter Product Name: ")
-            user.approve_transaction(buyer_name, product_name)
+            print("\n1. Approve by Buyer/Product Name")
+            print("2. Approve by Transaction ID")
+            approve_choice = input("Enter choice: ")
+            
+            if approve_choice == "1":
+                buyer_name = input("Enter Buyer Name: ")
+                product_name = input("Enter Product Name: ")
+                user.approve_transaction(buyer_name=buyer_name, product_name=product_name)
+            elif approve_choice == "2":
+                transaction_id = input("Enter Transaction ID: ")
+                user.approve_transaction(transaction_id=transaction_id)
+            else:
+                print("\n❌ Invalid choice.\n")
             
         elif choice == "4" and role == "admin":  # View Pending Loans
             user.view_all_loans(status="Pending")
@@ -199,7 +215,7 @@ def start_system(user_id, username, role):
                 print("\n✅ " + message if success else "\n❌ " + message)
                 
         elif choice == "7" and role == "admin":  # Generate Reports
-            print("\n1. Transaction Report\n2. User Report\n3. Loan Report\n4. Educational Resources Report")
+            print("\n1. Transaction Report\n2. User Report\n3. Loan Report\n4. Educational Resources Report\n5. Blockchain Report")
             report_choice = input("Enter choice: ")
             
             if report_choice == "1":
@@ -210,6 +226,8 @@ def start_system(user_id, username, role):
                 user.generate_report("loans")
             elif report_choice == "4":
                 user.generate_report("education")
+            elif report_choice == "5":
+                user.generate_blockchain_report()
             else:
                 print("\n❌ Invalid report type!")
                 
@@ -278,6 +296,23 @@ def start_system(user_id, username, role):
             else:
                 print("\n❌ Invalid report type!")
 
+        # Blockchain options for admin
+        elif choice == "10" and role == "admin":  # View Blockchain Transactions
+            user.view_blockchain_transactions()
+            
+        elif choice == "11" and role == "admin":  # Verify Blockchain Integrity
+            user.verify_blockchain_integrity()
+            
+        elif choice == "12" and role == "admin":  # View Smart Contracts
+            user.view_smart_contracts()
+            
+        elif choice == "13" and role == "admin":  # Execute Smart Contract
+            contract_id = input("Enter Smart Contract ID to execute: ")
+            user.execute_smart_contract(contract_id)
+            
+        elif choice == "14" and role == "admin":  # Generate Blockchain Report
+            user.generate_blockchain_report()
+            
         elif choice == "0":
             print("\n Logging out...\n")
             break
