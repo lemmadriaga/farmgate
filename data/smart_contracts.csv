@@ -1,2 +1,4 @@
 Contract ID,Buyer ID,Seller ID,Product ID,Price,Terms,Status,Creation Time,Execution Time
 b81387a3,8626c636,fa083da2,fa083da2,50.0,Standard purchase agreement,Executed,1742569841.573622,1742569897.949184
+871f0341,8626c636,8cfdb498,8cfdb498,60.0,Standard purchase agreement,Executed,1742570371.389611,1742570412.107935
+af4670ff,8626c636,7b44ddac,7b44ddac,120.0,Standard purchase agreement,Executed,1742570744.467176,1742570769.273623

@@ -321,8 +321,73 @@ class Blockchain:
             
             # Add transaction to pending
             self.add_transaction(transaction)
+            
+            # Also update the transaction status in transactions.csv
+            self._update_transaction_in_csv(contract)
         
         return success, message
+        
+    def _update_transaction_in_csv(self, contract):
+        """Update the transaction status in transactions.csv to Approved"""
+        import csv
+        import os
+        
+        transaction_file = os.path.join(DATA_FOLDER, "transactions.csv")
+        updated_transactions = []
+        transaction_found = False
+        
+        try:
+            # Read all transactions
+            with open(transaction_file, mode='r', newline='') as file:
+                reader = csv.reader(file)
+                headers = next(reader)  # Get header row
+                updated_transactions.append(headers)
+                
+                # Get blockchain transactions to find the transaction ID related to this contract
+                blockchain_transactions = self.get_transaction_history()
+                related_transaction_ids = []
+                
+                # Find transaction IDs related to this contract's product_id
+                for tx in blockchain_transactions:
+                    if tx['product_id'] == contract.product_id and tx['buyer_id'] == contract.buyer_id:
+                        related_transaction_ids.append(tx['id'])
+                
+                # Now process the transactions.csv file
+                for row in reader:
+                    # Check if this transaction matches any of the related transaction IDs
+                    if len(row) >= 5 and row[3] == "Pending":
+                        # In transactions.csv: [Buyer Name, Product Name, Price, Status, Transaction ID]
+                        if row[4] in related_transaction_ids:
+                            row[3] = "Approved"  # Update status to Approved
+                            transaction_found = True
+                            print(f"\n✅ Transaction {row[4]} for {row[1]} approved in traditional system.\n")
+                    updated_transactions.append(row)
+            
+            # Write back all transactions if any were updated
+            if transaction_found:
+                with open(transaction_file, mode='w', newline='') as file:
+                    writer = csv.writer(file)
+                    writer.writerows(updated_transactions)
+            else:
+                # If no exact match found, try to match by product name
+                with open(transaction_file, mode='r', newline='') as file:
+                    reader = csv.reader(file)
+                    headers = next(reader)  # Get header row
+                    updated_transactions = [headers]
+                    
+                    for row in reader:
+                        if len(row) >= 5 and row[3] == "Pending" and row[1] == contract.product_id:
+                            row[3] = "Approved"  # Update status to Approved
+                            transaction_found = True
+                            print(f"\n✅ Transaction for {row[1]} approved in traditional system.\n")
+                        updated_transactions.append(row)
+                
+                if transaction_found:
+                    with open(transaction_file, mode='w', newline='') as file:
+                        writer = csv.writer(file)
+                        writer.writerows(updated_transactions)
+        except Exception as e:
+            print(f"Error updating transaction in CSV: {e}")
     
     def load_contract_from_csv(self, contract_id):
         """Load a specific contract from CSV by ID"""
@@ -449,6 +514,29 @@ class Blockchain:
             print(f"Error getting transaction history: {e}")
         
         return transactions
+        
+    def store_product_listing(self, product_id, farmer_id, product_name, price):
+        """Store a product listing in the blockchain"""
+        # Create a product listing transaction
+        listing_transaction = {
+            "id": str(uuid.uuid4())[:8],
+            "type": "product_listing",
+            "farmer_id": farmer_id,
+            "product_id": product_id,
+            "product_name": product_name,
+            "price": float(price) if isinstance(price, str) else price,
+            "timestamp": time.time(),
+            "status": "Active"
+        }
+        
+        # Add transaction to pending transactions
+        self.add_transaction(listing_transaction)
+        
+        # Mine pending transactions to add to blockchain
+        # Using farmer_id as the miner address for reward
+        self.mine_pending_transactions(farmer_id)
+        
+        return True, "Product listing stored in blockchain"
     
     def get_contract_history(self, user_id=None):
         """Get contract history, optionally filtered by user ID"""

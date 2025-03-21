@@ -12,12 +12,12 @@ class Farmer(User):
         self.products = []
 
     def list_produce(self, product_name, price):
-        product = [self.user_id, self.name, product_name, price]
-        Database.write_to_csv("marketplace.csv", product, ["Farmer ID", "Name", "Product", "Price"])
-        print(f"\n✅ {product_name} listed for ₱{price:.2f} by {self.name}!\n")
+        # Use the Marketplace class to add the product with blockchain integration
+        from marketplace import Marketplace
+        product_id = Marketplace.add_product(self.user_id, self.name, product_name, price)
         
         # Add to farmer's products list
-        self.products.append({"name": product_name, "price": price})
+        self.products.append({"id": product_id, "name": product_name, "price": price})
 
     @staticmethod
     def get_farmers():
