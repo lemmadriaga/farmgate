@@ -5,6 +5,7 @@ from marketplace import Marketplace
 from admin import Admin
 from transactions import TransactionManager
 from loan_system import LoanSystem
+from educational_hub import EducationalHub
 import time
 
 def main():
@@ -81,24 +82,26 @@ def start_system(user_id, username, role):
         print("Common Options:")
         print("1. View Marketplace")
         print("2. View Transactions")
+        print("3. Educational Hub")
         
         # Role-specific options
         if role == "farmer":
             print("\nFarmer Options:")
-            print("3. List Produce")
-            print("4. Apply for Loan")
-            print("5. View My Loans")
-            print("6. Make Loan Repayment")
+            print("4. List Produce")
+            print("5. Apply for Loan")
+            print("6. View My Loans")
+            print("7. Make Loan Repayment")
         elif role == "buyer":
             print("\nBuyer Options:")
-            print("3. Purchase Produce")
+            print("4. Purchase Produce")
         elif role == "admin":
             print("\nAdmin Options:")
-            print("3. Approve Transaction")
-            print("4. View Pending Loans")
-            print("5. Approve/Reject Loan")
-            print("6. Manage Users")
-            print("7. Generate Reports")
+            print("4. Approve Transaction")
+            print("5. View Pending Loans")
+            print("6. Approve/Reject Loan")
+            print("7. Manage Users")
+            print("8. Generate Reports")
+            print("9. Manage Educational Resources")
         
         print("\n0. Logout")
         choice = input("\nEnter your choice: ")
@@ -109,6 +112,37 @@ def start_system(user_id, username, role):
             
         elif choice == "2":  # View Transactions
             transaction_manager.get_transactions()
+            
+        elif choice == "3":  # Educational Hub
+            print("\n===== Educational Hub =====\n")
+            print("1. View All Resources")
+            print("2. Search Resources")
+            print("3. View Latest Resources")
+            print("4. View Resources by Category")
+            print("5. View Resource Details")
+            print("0. Back to Main Menu")
+            
+            edu_choice = input("\nEnter your choice: ")
+            
+            if edu_choice == "1":
+                user.view_educational_resources()
+            elif edu_choice == "2":
+                query = input("Enter search term: ")
+                user.search_educational_resources(query)
+            elif edu_choice == "3":
+                limit = int(input("How many resources to view? (default: 5): ") or "5")
+                user.get_latest_resources(limit)
+            elif edu_choice == "4":
+                print("\nCategories: Farming, Market, Finance, Certification")
+                category = input("Enter category: ")
+                user.get_resources_by_category(category)
+            elif edu_choice == "5":
+                resource_id = input("Enter Resource ID: ")
+                user.view_resource_details(resource_id)
+            elif edu_choice == "0":
+                pass
+            else:
+                print("\n❌ Invalid choice.\n")
 
         # Farmer options
         elif choice == "3" and role == "farmer":  # List Produce
@@ -165,7 +199,7 @@ def start_system(user_id, username, role):
                 print("\n✅ " + message if success else "\n❌ " + message)
                 
         elif choice == "7" and role == "admin":  # Generate Reports
-            print("\n1. Transaction Report\n2. User Report\n3. Loan Report")
+            print("\n1. Transaction Report\n2. User Report\n3. Loan Report\n4. Educational Resources Report")
             report_choice = input("Enter choice: ")
             
             if report_choice == "1":
@@ -174,6 +208,73 @@ def start_system(user_id, username, role):
                 user.generate_report("users")
             elif report_choice == "3":
                 user.generate_report("loans")
+            elif report_choice == "4":
+                user.generate_report("education")
+            else:
+                print("\n❌ Invalid report type!")
+                
+        elif choice == "9" and role == "admin":  # Manage Educational Resources
+            print("\n===== Manage Educational Resources =====\n")
+            print("1. View All Resources")
+            print("2. Add New Resource")
+            print("3. Update Resource")
+            print("4. Delete Resource")
+            print("0. Back to Main Menu")
+            
+            edu_admin_choice = input("\nEnter your choice: ")
+            
+            if edu_admin_choice == "1":
+                hub = EducationalHub()
+                hub.view_all_resources()
+            elif edu_admin_choice == "2":
+                title = input("Enter resource title: ")
+                print("\nCategories: Farming, Market, Finance, Certification")
+                category = input("Enter category: ")
+                content = input("Enter resource content: ")
+                tags = input("Enter tags (comma-separated): ")
+                user.add_educational_resource(title, category, content, tags)
+            elif edu_admin_choice == "3":
+                # First show all resources
+                hub = EducationalHub()
+                hub.view_all_resources()
+                
+                resource_id = input("\nEnter Resource ID to update: ")
+                title = input("Enter new title (leave empty to keep current): ")
+                category = input("Enter new category (leave empty to keep current): ")
+                content = input("Enter new content (leave empty to keep current): ")
+                tags = input("Enter new tags (leave empty to keep current): ")
+                
+                user.update_educational_resource(
+                    resource_id,
+                    title=title if title else None,
+                    category=category if category else None,
+                    content=content if content else None,
+                    tags=tags if tags else None
+                )
+            elif edu_admin_choice == "4":
+                # First show all resources
+                hub = EducationalHub()
+                hub.view_all_resources()
+                
+                resource_id = input("\nEnter Resource ID to delete: ")
+                user.delete_educational_resource(resource_id)
+            elif edu_admin_choice == "0":
+                pass
+            else:
+                print("\n❌ Invalid choice.\n")
+                
+        elif choice == "8" and role == "admin":  # Generate Reports
+            print("\n1. Transaction Report\n2. User Report\n3. Loan Report\n4. Educational Resources Report")
+            report_choice = input("Enter choice: ")
+            
+            if report_choice == "1":
+                user.generate_report("transactions")
+            elif report_choice == "2":
+                user.generate_report("users")
+            elif report_choice == "3":
+                user.generate_report("loans")
+            elif report_choice == "4":
+                user.generate_report("education")
             else:
                 print("\n❌ Invalid report type!")
 

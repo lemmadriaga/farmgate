@@ -1,11 +1,12 @@
 import hashlib
 import uuid
 from database import Database
+from educational_hub import EducationalHub
 
 class User:
     """
     Base User class that serves as the parent class for Farmer, Buyer, and Admin.
-    Implements common functionality like registration, login, and profile management.
+    Implements common functionality like registration, login, profile management, and access to educational resources.
     """
     def __init__(self, user_id=None, name=None, email=None, password=None, role=None):
         self.user_id = user_id if user_id else str(uuid.uuid4())[:8]
@@ -177,3 +178,29 @@ class User:
             "role": self.role,
             "email": self.email
         }
+        
+    # Educational Hub Methods
+    def view_educational_resources(self):
+        """View all educational resources available in the system."""
+        hub = EducationalHub()
+        return hub.view_all_resources()
+    
+    def search_educational_resources(self, query):
+        """Search for educational resources by title, category, or tags."""
+        hub = EducationalHub()
+        return hub.search_resources(query)
+    
+    def view_resource_details(self, resource_id):
+        """View detailed information about a specific educational resource."""
+        hub = EducationalHub()
+        return hub.view_resource_details(resource_id)
+    
+    def get_resources_by_category(self, category):
+        """Get all resources in a specific category."""
+        hub = EducationalHub()
+        return hub.get_resources_by_category(category)
+    
+    def get_latest_resources(self, limit=5):
+        """Get the latest educational resources added to the system."""
+        hub = EducationalHub()
+        return hub.get_latest_resources(limit)

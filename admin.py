@@ -1,6 +1,7 @@
 from user import User
 from database import Database
 from loan_system import LoanSystem
+from educational_hub import EducationalHub
 import csv
 import os
 
@@ -221,4 +222,131 @@ class Admin(User):
             
             return True, report
         
+        elif report_type == "education":
+            # Generate a report on educational resources
+            hub = EducationalHub()
+            resources = Database.read_from_csv(hub.resources_file)
+            
+            # Count resources by category
+            categories = {}
+            for resource in resources:
+                if len(resource) >= 3:
+                    category = resource[2]
+                    if category in categories:
+                        categories[category] += 1
+                    else:
+                        categories[category] = 1
+            
+            report = {
+                "total_resources": len(resources),
+                "categories": categories
+            }
+            
+            print("\n📊 Educational Resources Report:")
+            print(f"- Total Resources: {report['total_resources']}")
+            print("- Resources by Category:")
+            for category, count in categories.items():
+                print(f"  * {category}: {count}")
+            
+            return True, report
+            
         return False, f"Unknown report type: {report_type}"
+    
+    # Educational Hub Management Methods
+    def add_educational_resource(self, title, category, content, tags):
+        """Add a new educational resource to the system."""
+        hub = EducationalHub()
+        success, message, resource_id = hub.add_resource(title, category, content, tags)
+        
+        if success:
+            print(f"\n✅ {message}\n")
+        else:
+            print(f"\n❌ {message}\n")
+            
+        return success, message
+    
+    def delete_educational_resource(self, resource_id):
+        """Delete an educational resource from the system."""
+        # Get all resources
+        hub = EducationalHub()
+        resources = Database.read_from_csv(hub.resources_file)
+        
+        # Find and remove the resource
+        updated_resources = []
+        found = False
+        
+        for resource in resources:
+            if len(resource) >= 1 and resource[0] == resource_id:
+                found = True
+                continue
+            updated_resources.append(resource)
+        
+        if not found:
+            print(f"\n❌ Resource with ID '{resource_id}' not found.\n")
+            return False, f"Resource with ID '{resource_id}' not found"
+        
+        # Write updated resources back to CSV
+        Database.update_csv_file(hub.resources_file, updated_resources)
+        
+        print(f"\n✅ Resource with ID '{resource_id}' deleted successfully.\n")
+        return True, f"Resource with ID '{resource_id}' deleted successfully"
+    
+    def update_educational_resource(self, resource_id, title=None, category=None, content=None, tags=None):
+        """Update an existing educational resource."""
+        # Get all resources
+        hub = EducationalHub()
+        resources = Database.read_csv_with_headers(hub.resources_file)
+        
+        if not resources or len(resources) < 2:
+            print("\n❌ No resources found.\n")
+            return False, "No resources found"
+        
+        # Find and update the resource
+        headers = resources[0]
+        updated_resources = [headers]
+        found = False
+        
+        for resource in resources[1:]:
+            if len(resource) >= 1 and resource[0] == resource_id:
+                found = True
+                # Update fields if provided
+                if title and len(resource) > 1:
+                    resource[1] = title
+                if category and len(resource) > 2:
+                    resource[2] = category
+                if content and len(resource) > 3:
+                    resource[3] = content
+                if tags and len(resource) > 4:
+                    resource[4] = tags
+            updated_resources.append(resource)
+        
+        if not found:
+            print(f"\n❌ Resource with ID '{resource_id}' not found.\n")
+            return False, f"Resource with ID '{resource_id}' not found"
+        
+        # Write updated resources back to CSV
+        Database.update_csv_file(hub.resources_file, updated_resources)
+        
+        print(f"\n✅ Resource with ID '{resource_id}' updated successfully.\n")
+        return True, f"Resource with ID '{resource_id}' updated successfully"
+    
+    # Educational Hub Methods that forward to User class methods
+    def view_educational_resources(self):
+        """View all educational resources available in the system."""
+        return super().view_educational_resources()
+    
+    def search_educational_resources(self, query):
+        """Search for educational resources by title, category, or tags."""
+        return super().search_educational_resources(query)
+    
+    def view_resource_details(self, resource_id):
+        """View detailed information about a specific educational resource."""
+        return super().view_resource_details(resource_id)
+    
+    def get_resources_by_category(self, category):
+        """Get all resources in a specific category."""
+        return super().get_resources_by_category(category)
+    
+    def get_latest_resources(self, limit=5):
+        """Get the latest educational resources added to the system."""
+        return super().get_latest_resources(limit)
