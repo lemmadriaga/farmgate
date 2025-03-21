@@ -1,7 +1,6 @@
 import csv
 import os
 
-# Please check if data folders exist 
 DATA_FOLDER = "data"
 if not os.path.exists(DATA_FOLDER):
     os.makedirs(DATA_FOLDER)
@@ -12,18 +11,16 @@ class Database:
         file_path = os.path.join(DATA_FOLDER, filename)
         file_exists = os.path.isfile(file_path)
 
-        with open(file_path, mode='a', newline='') as file:
-            writer = csv.writer(file)
-            if not file_exists:
-                writer.writerow(headers)  # Write headers if file is new
-            writer.writerow(data)
-
-    @staticmethod
-    def read_from_csv(filename):
-        file_path = os.path.join(DATA_FOLDER, filename)
-        if not os.path.isfile(file_path):
-            return []
-
-        with open(file_path, mode='r') as file:
-            reader = csv.reader(file)
-            return list(reader)[1:]  # Skip headers
+        try:
+            with open(file_path, mode='a', newline='') as file:
+                writer = csv.writer(file)
+                
+                if not file_exists or os.stat(file_path).st_size == 0:
+                    print("\n🔍 DEBUG: Writing headers to CSV...", headers)
+                    writer.writerow(headers)
+                
+                print("\n🔍 DEBUG: Writing user data to CSV...", data)
+                writer.writerow(data)
+                print("\n✅ DEBUG: Data successfully written to CSV.")
+        except Exception as e:
+            print("\n❌ ERROR: Could not write to CSV file:", e)
