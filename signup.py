@@ -26,30 +26,30 @@ class Signup:
         users = Database.read_from_csv(self.users_file)
         return any(user[1] == username for user in users)
 
-def register_user(self, username, password, role, email):
-    print("\n🔍 DEBUG: Starting registration process...")
+    def register_user(self, username, password, role, email):
+        print("\n🔍 DEBUG: Starting registration process...")
 
-    is_valid, message = self.validate_input(username, password, role, email)
-    if not is_valid:
-        print("\n❌ DEBUG: Validation failed:", message)
-        return False, message
+        is_valid, message = self.validate_input(username, password, role, email)
+        if not is_valid:
+            print("\n❌ DEBUG: Validation failed:", message)
+            return False, message
 
-    if self.check_existing_user(username):
-        print("\n❌ DEBUG: Username already exists")
-        return False, "Username already exists"
+        if self.check_existing_user(username):
+            print("\n❌ DEBUG: Username already exists")
+            return False, "Username already exists"
 
-    user_id = str(uuid.uuid4())[:8]
-    hashed_password = self.hash_password(password)
-    user_data = [user_id, username, hashed_password, role, email]
+        user_id = str(uuid.uuid4())[:8]
+        hashed_password = self.hash_password(password)
+        user_data = [user_id, username, hashed_password, role, email]
 
-    print("\n🔍 DEBUG: Attempting to write user data to CSV...", user_data)
+        print("\n🔍 DEBUG: Attempting to write user data to CSV...", user_data)
 
-    try:
-        Database.write_to_csv(self.users_file, user_data, self.headers)
-        print("\n✅ DEBUG: User successfully saved.")
-        return True, f"Registration successful! Your User ID: {user_id}"
-    except Exception as e:
-        print("\n❌ ERROR: Failed to write to CSV:", e)
-        return False, "An error occurred while saving user data."
+        try:
+            Database.write_to_csv(self.users_file, user_data, self.headers)
+            print("\n✅ DEBUG: User successfully saved.")
+            return True, f"Registration successful! Your User ID: {user_id}"
+        except Exception as e:
+            print("\n❌ ERROR: Failed to write to CSV:", e)
+            return False, "An error occurred while saving user data."
 
 

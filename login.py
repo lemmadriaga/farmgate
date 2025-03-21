@@ -17,12 +17,12 @@ class Login:
                 return True
         return False
 
-def get_user_details(self, username):
-    users = Database.read_from_csv(self.users_file)
-    for user in users:
-        if user[1] == username:
-            print("\n🔍 DEBUG: Retrieved user details:", user)  # Debugging line
-            return {"user_id": user[0], "role": user[3]}
-    print("\n❌ DEBUG: User not found in users.csv")
-    return None
+    def get_user_details(self, username):
+        users = Database.read_from_csv(self.users_file)
+        for user in users:
+            if user[1] == username:
+                print("\n🔍 DEBUG: Retrieved user details:", user)  # Debugging line
+                return {"user_id": user[0], "role": user[3]}
+        print("\n❌ DEBUG: User not found in users.csv")
+        return None
 
