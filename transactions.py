@@ -36,7 +36,14 @@ class TransactionManager:
         else:
             print("\n Transaction History:")
             for t in transactions:
-                print(f"- Buyer: {t[0]} | Product: {t[1]} | Price: ₱{t[2]} | Status: {t[3]}")
+                try:
+                    # Check if transaction has enough elements
+                    if len(t) >= 4:
+                        print(f"- Buyer: {t[1]} | Product: {t[2]} | Price: ₱{t[3]} | Status: {t[4]}")
+                    else:
+                        print(f"- Nothing else yet...: {', '.join(t)}")
+                except Exception as e:
+                    print(f"- Error displaying transaction: {e}")
         print()
         return transactions
 
