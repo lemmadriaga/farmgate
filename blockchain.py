@@ -34,7 +34,7 @@ class Block:
         while self.hash[:difficulty] != target:
             self.nonce += 1
             self.hash = self.calculate_hash()
-        print(f"\n✅ Block mined: {self.hash}")
+        print(f"\n Block mined: {self.hash}")
         return self.hash
 
     def to_dict(self):
@@ -265,7 +265,7 @@ class Blockchain:
                 print(f"\n Invalid previous hash reference for block {i}")
                 return False
         
-        print("\n✅ Blockchain is valid")
+        print("\n Blockchain is valid")
         return True
     
     def create_smart_contract(self, buyer_id, seller_id, product_id, price, terms):
@@ -360,7 +360,7 @@ class Blockchain:
                         if row[4] in related_transaction_ids:
                             row[3] = "Approved"  # Update status to Approved
                             transaction_found = True
-                            print(f"\n✅ Transaction {row[4]} for {row[1]} approved in traditional system.\n")
+                            print(f"\n Transaction {row[4]} for {row[1]} approved in traditional system.\n")
                     updated_transactions.append(row)
             
             # Write back all transactions if any were updated
@@ -379,7 +379,7 @@ class Blockchain:
                         if len(row) >= 5 and row[3] == "Pending" and row[1] == contract.product_id:
                             row[3] = "Approved"  # Update status to Approved
                             transaction_found = True
-                            print(f"\n✅ Transaction for {row[1]} approved in traditional system.\n")
+                            print(f"\n Transaction for {row[1]} approved in traditional system.\n")
                         updated_transactions.append(row)
                 
                 if transaction_found:

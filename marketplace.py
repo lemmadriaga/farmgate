@@ -29,7 +29,7 @@ class Marketplace:
         success, message = blockchain.store_product_listing(product_id, farmer_id, product_name, price)
         
         if success:
-            print(f"\n✅ {product_name} listed for ₱{float(price):.2f} by {farmer_name}!")
+            print(f"\n {product_name} listed for ₱{float(price):.2f} by {farmer_name}!")
             print(f"   Product ID: {product_id} (secured by blockchain)\n")
         else:
             print(f"\n⚠️ {product_name} listed in traditional system only.")

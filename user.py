@@ -65,7 +65,7 @@ class User:
 
         try:
             Database.write_to_csv(self.users_file, user_data, self.headers)
-            print("\n✅ User successfully registered!")
+            print("\n User successfully registered!")
             
             # Update the current instance with the new data
             self.user_id = user_id

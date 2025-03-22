@@ -43,7 +43,7 @@ class Admin(User):
                 # Execute the smart contract if found
                 if contract_id:
                     transaction_manager.execute_smart_contract(contract_id)
-                    print(f"\n✅ Smart contract {contract_id} executed for transaction {transaction_id}\n")
+                    print(f"\n Smart contract {contract_id} executed for transaction {transaction_id}\n")
                     return True, f"Transaction {transaction_id} approved and smart contract executed"
                 
                 return True, message
@@ -76,7 +76,7 @@ class Admin(User):
                     found = True
                     if len(transaction) >= 5:
                         found_transaction_id = transaction[4]
-                    print(f"\n✅ Transaction approved: {buyer_name}'s purchase of {product_name}\n")
+                    print(f"\n Transaction approved: {buyer_name}'s purchase of {product_name}\n")
                 updated_transactions.append(transaction)
             
             if not found:
@@ -116,7 +116,7 @@ class Admin(User):
             action = "approved" if approved else "rejected"
             farmer_id = loan_details["farmer_id"]
             amount = loan_details["amount"]
-            print(f"\n✅ {message}\n")
+            print(f"\n {message}\n")
             return True, f"Loan {action} for farmer {farmer_id} in the amount of ₱{amount}"
         else:
             print(f"\n {message}\n")
@@ -321,7 +321,7 @@ class Admin(User):
         success, message, resource_id = hub.add_resource(title, category, content, tags)
         
         if success:
-            print(f"\n✅ {message}\n")
+            print(f"\n {message}\n")
         else:
             print(f"\n {message}\n")
             
@@ -350,7 +350,7 @@ class Admin(User):
         # Write updated resources back to CSV
         Database.update_csv_file(hub.resources_file, updated_resources)
         
-        print(f"\n✅ Resource with ID '{resource_id}' deleted successfully.\n")
+        print(f"\n Resource with ID '{resource_id}' deleted successfully.\n")
         return True, f"Resource with ID '{resource_id}' deleted successfully"
     
     def update_educational_resource(self, resource_id, title=None, category=None, content=None, tags=None):
@@ -389,7 +389,7 @@ class Admin(User):
         # Write updated resources back to CSV
         Database.update_csv_file(hub.resources_file, updated_resources)
         
-        print(f"\n✅ Resource with ID '{resource_id}' updated successfully.\n")
+        print(f"\n Resource with ID '{resource_id}' updated successfully.\n")
         return True, f"Resource with ID '{resource_id}' updated successfully"
     
     # Educational Hub Methods that forward to User class methods
@@ -426,7 +426,7 @@ class Admin(User):
         transaction_manager = TransactionManager()
         is_valid = transaction_manager.verify_blockchain()
         if is_valid:
-            print("\n✅ Blockchain integrity verified. All transactions are secure.\n")
+            print("\n Blockchain integrity verified. All transactions are secure.\n")
         else:
             print("\n Blockchain integrity check failed. There may be tampering.\n")
         return is_valid
@@ -442,7 +442,7 @@ class Admin(User):
         else:
             print("\n Smart Contract History:")
             for contract in contracts:
-                status_symbol = "✅" if contract["status"] == "Executed" else "⏳"
+                status_symbol = "" if contract["status"] == "Executed" else "⏳"
                 print(f"- {status_symbol} Contract ID: {contract['contract_id']} | Status: {contract['status']}")
                 print(f"  Buyer: {contract['buyer_id']} | Seller: {contract['seller_id']} | Product: {contract['product_id']}")
                 print(f"  Price: ₱{contract['price']:.2f} | Terms: {contract['terms']}")
@@ -459,7 +459,7 @@ class Admin(User):
         success, message = transaction_manager.execute_smart_contract(contract_id)
         
         if success:
-            print(f"\n✅ Smart contract {contract_id} executed successfully.\n")
+            print(f"\n Smart contract {contract_id} executed successfully.\n")
         else:
             print(f"\n Failed to execute smart contract: {message}\n")
         
@@ -487,7 +487,7 @@ class Admin(User):
         
         # Display report
         print("\n📊 BLOCKCHAIN ACTIVITY REPORT\n")
-        print(f"Blockchain Integrity: {'✅ Valid' if chain_valid else ' Invalid'}")
+        print(f"Blockchain Integrity: {' Valid' if chain_valid else ' Invalid'}")
         print("\nTransaction Statistics:")
         print(f"- Total Transactions: {total_transactions}")
         print(f"- Confirmed: {confirmed_transactions}")
@@ -530,7 +530,7 @@ class Admin(User):
         transaction_manager = TransactionManager()
         is_valid = transaction_manager.verify_blockchain()
         if is_valid:
-            print("\n✅ Blockchain integrity verified. All transactions are secure.\n")
+            print("\n Blockchain integrity verified. All transactions are secure.\n")
         else:
             print("\n Blockchain integrity check failed. There may be tampering.\n")
         return is_valid
@@ -546,7 +546,7 @@ class Admin(User):
         else:
             print("\n Smart Contract History:")
             for contract in contracts:
-                status_symbol = "✅" if contract["status"] == "Executed" else "⏳"
+                status_symbol = "" if contract["status"] == "Executed" else "⏳"
                 print(f"- {status_symbol} Contract ID: {contract['contract_id']} | Status: {contract['status']}")
                 print(f"  Buyer: {contract['buyer_id']} | Seller: {contract['seller_id']} | Product: {contract['product_id']}")
                 print(f"  Price: ₱{contract['price']:.2f} | Terms: {contract['terms']}")

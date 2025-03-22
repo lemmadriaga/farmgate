@@ -24,7 +24,7 @@ def main():
             email = input("Enter email: ")
 
             success, message = user.register(username, password, role, email)
-            print("\n✅ " + message if success else "\n " + message)
+            print("\n " + message if success else "\n " + message)
 
             if success:
                 print("\n🔄 Logging you in automatically...\n")
@@ -32,7 +32,7 @@ def main():
                 user_details = user.get_user_details()
 
                 if user_details:
-                    print(f"\n✅ Proceeding to system with user_id: {user_details['user_id']}")
+                    print(f"\n Proceeding to system with user_id: {user_details['user_id']}")
                     start_system(user_details["user_id"], username, user_details["role"])
                     break  
                 else:
@@ -46,7 +46,7 @@ def main():
             
             if success:
                 user_details = result  # result contains user details on successful login
-                print(f"\n✅ Login successful! Welcome, {username} (User ID: {user_details['user_id']})")
+                print(f"\n Login successful! Welcome, {username} (User ID: {user_details['user_id']})")
                 start_system(user_details["user_id"], username, user_details["role"])
                 break  
             else:
@@ -212,7 +212,7 @@ def start_system(user_id, username, role):
             elif admin_choice == "2":
                 user_id_to_delete = input("Enter User ID to delete: ")
                 success, message = user.manage_users("delete", user_id=user_id_to_delete)
-                print("\n✅ " + message if success else "\n " + message)
+                print("\n " + message if success else "\n " + message)
                 
         elif choice == "7" and role == "admin":  # Generate Reports
             print("\n1. Transaction Report\n2. User Report\n3. Loan Report\n4. Educational Resources Report\n5. Blockchain Report")

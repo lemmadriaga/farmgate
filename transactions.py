@@ -49,7 +49,7 @@ class TransactionManager:
             success, _ = self.blockchain.store_transaction(transaction)
             if success:
                 price_float = float(price) if isinstance(price, str) else price
-                print(f"\n✅ Transaction recorded securely: {buyer_name} purchased {product_name} for ₱{price_float:.2f} ({status})")
+                print(f"\n Transaction recorded securely: {buyer_name} purchased {product_name} for ₱{price_float:.2f} ({status})")
                 print(f"   Transaction ID: {transaction_id} (secured by blockchain)\n")
                 return transaction_id
             else:
@@ -80,7 +80,7 @@ class TransactionManager:
                     try:
                         # Check if transaction has enough elements
                         if len(t) >= 4:
-                            status_symbol = "✅" if t[3] == "Approved" else "⏳"
+                            status_symbol = "" if t[3] == "Approved" else "⏳"
                             tx_id = f" | ID: {t[4]}" if len(t) >= 5 else ""
                             print(f"- {status_symbol} Buyer: {t[0]} | Product: {t[1]} | Price: ₱{t[2]} | Status: {t[3]}{tx_id}")
                         else:
@@ -99,7 +99,7 @@ class TransactionManager:
         else:
             print("\n Blockchain Transaction History:")
             for tx in transactions:
-                status_symbol = "✅" if tx["status"] == "Confirmed" else "⏳"
+                status_symbol = "" if tx["status"] == "Confirmed" else "⏳"
                 print(f"- {status_symbol} ID: {tx['id']} | Amount: ₱{tx['amount']:.2f} | Status: {tx['status']}")
                 print(f"  Buyer: {tx['buyer_id']} | Seller: {tx['seller_id']} | Product: {tx['product_id']}")
                 if tx["block_hash"]:
@@ -111,7 +111,7 @@ class TransactionManager:
     def create_smart_contract(self, buyer_id, seller_id, product_id, price, terms="Standard purchase agreement"):
         """Create a smart contract for a transaction."""
         contract_id = self.blockchain.create_smart_contract(buyer_id, seller_id, product_id, price, terms)
-        print(f"\n✅ Smart contract created for purchase")
+        print(f"\n Smart contract created for purchase")
         print(f"   Contract ID: {contract_id}\n")
         return contract_id
     
@@ -119,7 +119,7 @@ class TransactionManager:
         """Execute a smart contract by its ID."""
         success, message = self.blockchain.execute_smart_contract(contract_id)
         if success:
-            print(f"\n✅ Smart contract executed successfully: {contract_id}\n")
+            print(f"\n Smart contract executed successfully: {contract_id}\n")
             # Mine the blockchain to confirm the transaction
             self.blockchain.mine_pending_transactions("admin")
         else:
@@ -157,7 +157,7 @@ class TransactionManager:
             # Mine pending transactions in blockchain
             self.blockchain.mine_pending_transactions("admin")
             
-            print(f"\n✅ Transaction Approved for {buyer_name}: {product_name}")
+            print(f"\n Transaction Approved for {buyer_name}: {product_name}")
             print(f"   Transaction ID: {transaction_id} (secured by blockchain)\n")
             return True, f"Transaction {transaction_id} approved successfully"
         else:

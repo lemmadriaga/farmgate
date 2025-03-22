@@ -41,7 +41,7 @@ class Farmer(User):
         )
         
         if success:
-            print(f"\n✅ {message}\n")
+            print(f"\n {message}\n")
         else:
             print(f"\n {message}\n")
             
@@ -108,7 +108,7 @@ class Farmer(User):
         success, message = loan_system.make_repayment(loan_id, amount)
         
         if success:
-            print(f"\n✅ {message}\n")
+            print(f"\n {message}\n")
         else:
             print(f"\n {message}\n")
             

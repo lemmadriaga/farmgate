@@ -46,7 +46,7 @@ class Signup:
 
         try:
             Database.write_to_csv(self.users_file, user_data, self.headers)
-            print("\n✅ DEBUG: User successfully saved.")
+            print("\n DEBUG: User successfully saved.")
             return True, f"Registration successful! Your User ID: {user_id}"
         except Exception as e:
             print("\n ERROR: Failed to write to CSV:", e)
