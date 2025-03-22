@@ -43,7 +43,7 @@ class Farmer(User):
         if success:
             print(f"\n✅ {message}\n")
         else:
-            print(f"\n❌ {message}\n")
+            print(f"\n {message}\n")
             
         return success, message
         
@@ -53,7 +53,7 @@ class Farmer(User):
         farmer_loans = loan_system.get_farmer_loans(self.user_id)
         
         if not farmer_loans:
-            print("\n❌ No loans found for your account.\n")
+            print("\n No loans found for your account.\n")
             return []
         
         print("\n===== Your Loan Applications =====\n")
@@ -101,7 +101,7 @@ class Farmer(User):
                 break
         
         if not loan_belongs_to_farmer:
-            print("\n❌ This loan does not belong to you or does not exist.\n")
+            print("\n This loan does not belong to you or does not exist.\n")
             return False, "This loan does not belong to you or does not exist."
         
         # Make the repayment
@@ -110,6 +110,6 @@ class Farmer(User):
         if success:
             print(f"\n✅ {message}\n")
         else:
-            print(f"\n❌ {message}\n")
+            print(f"\n {message}\n")
             
         return success, message

@@ -55,5 +55,5 @@ class Buyer(User):
                 
                 return True, f"Successfully purchased {product_name} with secure blockchain transaction"
 
-        print("\n❌ Product not found!\n")
+        print("\n Product not found!\n")
         return False, "Product not found"

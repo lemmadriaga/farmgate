@@ -181,7 +181,7 @@ class Blockchain:
     def mine_pending_transactions(self, miner_address):
         """Mine pending transactions and add them to a new block"""
         if not self.pending_transactions:
-            print("\n❌ No transactions to mine")
+            print("\n No transactions to mine")
             return False
         
         # Add mining reward transaction
@@ -257,12 +257,12 @@ class Blockchain:
             
             # Check if hash is correct
             if current_block.hash != current_block.calculate_hash():
-                print(f"\n❌ Invalid hash for block {i}: {current_block.hash}")
+                print(f"\n Invalid hash for block {i}: {current_block.hash}")
                 return False
             
             # Check if previous hash reference is correct
             if current_block.previous_hash != previous_block.hash:
-                print(f"\n❌ Invalid previous hash reference for block {i}")
+                print(f"\n Invalid previous hash reference for block {i}")
                 return False
         
         print("\n✅ Blockchain is valid")

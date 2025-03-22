@@ -48,12 +48,12 @@ class User:
         # Validate input
         is_valid, message = self.validate_input(username, password, role, email)
         if not is_valid:
-            print(f"\n❌ Validation failed: {message}")
+            print(f"\n Validation failed: {message}")
             return False, message
 
         # Check if username exists
         if self.check_existing_user(username):
-            print("\n❌ Username already exists")
+            print("\n Username already exists")
             return False, "Username already exists"
 
         # Create new user
@@ -76,7 +76,7 @@ class User:
             
             return True, f"Registration successful! Your User ID: {user_id}"
         except Exception as e:
-            print(f"\n❌ Error: {e}")
+            print(f"\n Error: {e}")
             return False, "An error occurred while saving user data."
 
     def login(self, username, password):

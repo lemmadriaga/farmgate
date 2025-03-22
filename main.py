@@ -24,7 +24,7 @@ def main():
             email = input("Enter email: ")
 
             success, message = user.register(username, password, role, email)
-            print("\n✅ " + message if success else "\n❌ " + message)
+            print("\n✅ " + message if success else "\n " + message)
 
             if success:
                 print("\n🔄 Logging you in automatically...\n")
@@ -36,7 +36,7 @@ def main():
                     start_system(user_details["user_id"], username, user_details["role"])
                     break  
                 else:
-                    print("\n❌ ERROR: User details not found. Please log in manually.")
+                    print("\n ERROR: User details not found. Please log in manually.")
 
         elif choice == "2":
             username = input("Enter username: ")
@@ -50,7 +50,7 @@ def main():
                 start_system(user_details["user_id"], username, user_details["role"])
                 break  
             else:
-                print(f"\n❌ {result}")  # result contains error message on failed login
+                print(f"\n {result}")  # result contains error message on failed login
 
         elif choice == "3":
             print("\n Exiting FarmGate System. Thank you! \n")
@@ -71,7 +71,7 @@ def start_system(user_id, username, role):
     elif role == "admin":
         user = Admin(username, user_id=user_id)
     else:
-        print("\n❌ Invalid role. Logging out.\n")
+        print("\n Invalid role. Logging out.\n")
         return
 
     # Display role-specific menu
@@ -148,7 +148,7 @@ def start_system(user_id, username, role):
             elif edu_choice == "0":
                 pass
             else:
-                print("\n❌ Invalid choice.\n")
+                print("\n Invalid choice.\n")
 
         # Farmer options
         elif choice == "4" and role == "farmer":  # List Produce
@@ -192,7 +192,7 @@ def start_system(user_id, username, role):
                 transaction_id = input("Enter Transaction ID: ")
                 user.approve_transaction(transaction_id=transaction_id)
             else:
-                print("\n❌ Invalid choice.\n")
+                print("\n Invalid choice.\n")
             
         elif choice == "4" and role == "admin":  # View Pending Loans
             user.view_all_loans(status="Pending")
@@ -212,7 +212,7 @@ def start_system(user_id, username, role):
             elif admin_choice == "2":
                 user_id_to_delete = input("Enter User ID to delete: ")
                 success, message = user.manage_users("delete", user_id=user_id_to_delete)
-                print("\n✅ " + message if success else "\n❌ " + message)
+                print("\n✅ " + message if success else "\n " + message)
                 
         elif choice == "7" and role == "admin":  # Generate Reports
             print("\n1. Transaction Report\n2. User Report\n3. Loan Report\n4. Educational Resources Report\n5. Blockchain Report")
@@ -229,7 +229,7 @@ def start_system(user_id, username, role):
             elif report_choice == "5":
                 user.generate_blockchain_report()
             else:
-                print("\n❌ Invalid report type!")
+                print("\n Invalid report type!")
                 
         elif choice == "9" and role == "admin":  # Manage Educational Resources
             print("\n===== Manage Educational Resources =====\n")
@@ -279,7 +279,7 @@ def start_system(user_id, username, role):
             elif edu_admin_choice == "0":
                 pass
             else:
-                print("\n❌ Invalid choice.\n")
+                print("\n Invalid choice.\n")
                 
         elif choice == "8" and role == "admin":  # Generate Reports
             print("\n1. Transaction Report\n2. User Report\n3. Loan Report\n4. Educational Resources Report")
@@ -294,7 +294,7 @@ def start_system(user_id, username, role):
             elif report_choice == "4":
                 user.generate_report("education")
             else:
-                print("\n❌ Invalid report type!")
+                print("\n Invalid report type!")
 
         # Blockchain options for admin
         elif choice == "10" and role == "admin":  # View Blockchain Transactions

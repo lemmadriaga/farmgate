@@ -31,11 +31,11 @@ class Signup:
 
         is_valid, message = self.validate_input(username, password, role, email)
         if not is_valid:
-            print("\n❌ DEBUG: Validation failed:", message)
+            print("\n DEBUG: Validation failed:", message)
             return False, message
 
         if self.check_existing_user(username):
-            print("\n❌ DEBUG: Username already exists")
+            print("\n DEBUG: Username already exists")
             return False, "Username already exists"
 
         user_id = str(uuid.uuid4())[:8]
@@ -49,7 +49,7 @@ class Signup:
             print("\n✅ DEBUG: User successfully saved.")
             return True, f"Registration successful! Your User ID: {user_id}"
         except Exception as e:
-            print("\n❌ ERROR: Failed to write to CSV:", e)
+            print("\n ERROR: Failed to write to CSV:", e)
             return False, "An error occurred while saving user data."
 
 

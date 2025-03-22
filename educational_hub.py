@@ -49,7 +49,7 @@ class EducationalHub:
         resources = Database.read_from_csv(self.resources_file)
         
         if not resources:
-            print("\n❌ No educational resources found.\n")
+            print("\n No educational resources found.\n")
             return []
         
         print("\n===== Educational Resources =====\n")
@@ -91,7 +91,7 @@ class EducationalHub:
                     matching_resources.append(resource)
         
         if not matching_resources:
-            print(f"\n❌ No resources found matching '{query}'.\n")
+            print(f"\n No resources found matching '{query}'.\n")
             return []
         
         print(f"\n===== Search Results for '{query}' =====\n")
@@ -148,7 +148,7 @@ class EducationalHub:
                     "date_added": date_added
                 }
         
-        print(f"\n❌ Resource with ID '{resource_id}' not found.\n")
+        print(f"\n Resource with ID '{resource_id}' not found.\n")
         return None
     
     def add_resource(self, title, category, content, tags):
@@ -204,7 +204,7 @@ class EducationalHub:
                 category_resources.append(resource)
         
         if not category_resources:
-            print(f"\n❌ No resources found in category '{category}'.\n")
+            print(f"\n No resources found in category '{category}'.\n")
             return []
         
         print(f"\n===== Resources in Category '{category}' =====\n")
@@ -241,7 +241,7 @@ class EducationalHub:
         latest_resources = sorted_resources[:limit]
         
         if not latest_resources:
-            print("\n❌ No resources found.\n")
+            print("\n No resources found.\n")
             return []
         
         print(f"\n===== Latest Educational Resources =====\n")

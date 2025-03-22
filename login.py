@@ -23,6 +23,6 @@ class Login:
             if user[1] == username:
                 print("\n🔍 DEBUG: Retrieved user details:", user)  # Debugging line
                 return {"user_id": user[0], "role": user[3]}
-        print("\n❌ DEBUG: User not found in users.csv")
+        print("\n DEBUG: User not found in users.csv")
         return None
 

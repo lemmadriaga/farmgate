@@ -56,7 +56,7 @@ class Admin(User):
             # Get transactions from CSV
             transactions_file = os.path.join("data", "transactions.csv")
             if not os.path.isfile(transactions_file):
-                print("\n❌ No transactions found.\n")
+                print("\n No transactions found.\n")
                 return False, "No transactions found"
             
             with open(transactions_file, mode='r') as file:
@@ -80,7 +80,7 @@ class Admin(User):
                 updated_transactions.append(transaction)
             
             if not found:
-                print("\n❌ Transaction not found or already approved.\n")
+                print("\n Transaction not found or already approved.\n")
                 return False, "Transaction not found or already approved"
             
             # Write updated transactions back to CSV
@@ -95,7 +95,7 @@ class Admin(User):
             
             return True, f"Transaction approved: {buyer_name}'s purchase of {product_name}"
         else:
-            print("\n❌ Please provide either transaction_id or both buyer_name and product_name.\n")
+            print("\n Please provide either transaction_id or both buyer_name and product_name.\n")
             return False, "Missing required parameters"
     
     def approve_loan(self, loan_id, approved=True):
@@ -106,7 +106,7 @@ class Admin(User):
         # Get loan details first to show more information
         loan_details = loan_system.get_loan_details(loan_id)
         if not loan_details:
-            print(f"\n❌ Loan with ID {loan_id} not found.\n")
+            print(f"\n Loan with ID {loan_id} not found.\n")
             return False, f"Loan with ID {loan_id} not found"
         
         # Approve or reject the loan
@@ -119,7 +119,7 @@ class Admin(User):
             print(f"\n✅ {message}\n")
             return True, f"Loan {action} for farmer {farmer_id} in the amount of ₱{amount}"
         else:
-            print(f"\n❌ {message}\n")
+            print(f"\n {message}\n")
             return False, message
             
     def view_all_loans(self, status=None):
@@ -134,7 +134,7 @@ class Admin(User):
         
         if not filtered_loans:
             status_msg = f" with status '{status}'" if status else ""
-            print(f"\n❌ No loans{status_msg} found.\n")
+            print(f"\n No loans{status_msg} found.\n")
             return []
         
         print("\n===== Loan Applications =====\n")
@@ -323,7 +323,7 @@ class Admin(User):
         if success:
             print(f"\n✅ {message}\n")
         else:
-            print(f"\n❌ {message}\n")
+            print(f"\n {message}\n")
             
         return success, message
     
@@ -344,7 +344,7 @@ class Admin(User):
             updated_resources.append(resource)
         
         if not found:
-            print(f"\n❌ Resource with ID '{resource_id}' not found.\n")
+            print(f"\n Resource with ID '{resource_id}' not found.\n")
             return False, f"Resource with ID '{resource_id}' not found"
         
         # Write updated resources back to CSV
@@ -360,7 +360,7 @@ class Admin(User):
         resources = Database.read_csv_with_headers(hub.resources_file)
         
         if not resources or len(resources) < 2:
-            print("\n❌ No resources found.\n")
+            print("\n No resources found.\n")
             return False, "No resources found"
         
         # Find and update the resource
@@ -383,7 +383,7 @@ class Admin(User):
             updated_resources.append(resource)
         
         if not found:
-            print(f"\n❌ Resource with ID '{resource_id}' not found.\n")
+            print(f"\n Resource with ID '{resource_id}' not found.\n")
             return False, f"Resource with ID '{resource_id}' not found"
         
         # Write updated resources back to CSV
@@ -428,7 +428,7 @@ class Admin(User):
         if is_valid:
             print("\n✅ Blockchain integrity verified. All transactions are secure.\n")
         else:
-            print("\n❌ Blockchain integrity check failed. There may be tampering.\n")
+            print("\n Blockchain integrity check failed. There may be tampering.\n")
         return is_valid
     
     def view_smart_contracts(self):
@@ -461,7 +461,7 @@ class Admin(User):
         if success:
             print(f"\n✅ Smart contract {contract_id} executed successfully.\n")
         else:
-            print(f"\n❌ Failed to execute smart contract: {message}\n")
+            print(f"\n Failed to execute smart contract: {message}\n")
         
         return success, message
     
@@ -487,7 +487,7 @@ class Admin(User):
         
         # Display report
         print("\n📊 BLOCKCHAIN ACTIVITY REPORT\n")
-        print(f"Blockchain Integrity: {'✅ Valid' if chain_valid else '❌ Invalid'}")
+        print(f"Blockchain Integrity: {'✅ Valid' if chain_valid else ' Invalid'}")
         print("\nTransaction Statistics:")
         print(f"- Total Transactions: {total_transactions}")
         print(f"- Confirmed: {confirmed_transactions}")
@@ -532,7 +532,7 @@ class Admin(User):
         if is_valid:
             print("\n✅ Blockchain integrity verified. All transactions are secure.\n")
         else:
-            print("\n❌ Blockchain integrity check failed. There may be tampering.\n")
+            print("\n Blockchain integrity check failed. There may be tampering.\n")
         return is_valid
     
     def view_smart_contracts(self):

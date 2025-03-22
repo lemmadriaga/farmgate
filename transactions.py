@@ -123,7 +123,7 @@ class TransactionManager:
             # Mine the blockchain to confirm the transaction
             self.blockchain.mine_pending_transactions("admin")
         else:
-            print(f"\n❌ Failed to execute smart contract: {message}\n")
+            print(f"\n Failed to execute smart contract: {message}\n")
         return success, message
     
     def verify_blockchain(self):
@@ -161,5 +161,5 @@ class TransactionManager:
             print(f"   Transaction ID: {transaction_id} (secured by blockchain)\n")
             return True, f"Transaction {transaction_id} approved successfully"
         else:
-            print("\n❌ Transaction not found or already approved.\n")
+            print("\n Transaction not found or already approved.\n")
             return False, "Transaction not found or already approved"
